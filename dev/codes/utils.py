@@ -18,7 +18,7 @@ def check_directory_path_existence(directory_path: str) -> str:
         A string which contains the absolute directory path.
     """
     # Creates the following directory path if it does not exist.
-    home_directory_path = os.path.dirname(os.path.dirname(os.getcwd()))
+    home_directory_path = os.path.dirname(os.getcwd())
     absolute_directory_path = '{}/{}'.format(home_directory_path, directory_path)
     if not os.path.isdir(absolute_directory_path):
         os.makedirs(absolute_directory_path)
