@@ -69,7 +69,7 @@ def data_downloader_extractor(data_split: str) -> None:
     n_images_saved = len(os.listdir(extracted_images_directory_path))
 
     # Creates an empty dictionary for storing image
-    images_information = {'image_id': list(), 'label': list(), 'classes': list()}
+    images_information = {'image_id': list(), 'label': list(), 'class': list()}
 
     # Iterates across examples in the dataset.
     n_original_examples = info.splits[data_split].num_examples
@@ -80,8 +80,8 @@ def data_downloader_extractor(data_split: str) -> None:
 
         # Saves the current image information to the dictionary.
         images_information['image_id'].append(n_images_saved + index)
-        images_information['label_id'].append(label)
-        images_information['label'].append(classes[label])
+        images_information['label'].append(label.numpy())
+        images_information['class'].append(classes[label.numpy()])
     
     # Converts the dictionary into a dataframe.
     images_information_df = pd.DataFrame(images_information)
