@@ -59,7 +59,6 @@ class CifarImageRecognition(tf.keras.Model):
             # If layer's name is like 'globalaveragepool2d_', a Global Average Pooling 2D layer is initialized.
                 self.model_layers[layer_name] = tf.keras.layers.GlobalAveragePooling2D()
 
-
     def call(self, x: tf.Tensor, training: bool) -> tf.Tensor:
         """Input tensor is passed through the layers in the encoder model."""
 
@@ -77,4 +76,14 @@ class CifarImageRecognition(tf.keras.Model):
             else:
                 x = self.model_layers[layer_name](x)
         return x
-    
+
+    def build_graph(self) -> tf.keras.Model:
+        """Builds plottable graph for the model."""
+        # Creates the input layer using the model configuration.
+        x = tf.keras.layers.Input(shape=(
+            self.model_configuration['final_image_size'], self.model_configuration['final_image_size'], 
+            self.model_configuration['n_channels']
+        ))
+
+        # Creates an object for the tensorflow model and returns it.
+        return tf.keras.Model(inputs=[x], outputs=self.call(x, False))
