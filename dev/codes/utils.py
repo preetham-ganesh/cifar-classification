@@ -141,3 +141,39 @@ def load_preprocess_image(image_id: str, final_image_size: int, n_channels: int)
     if image.shape[0] > final_image_size or image.shape[1] > final_image_size:
         image = tf.image.resize(image, (final_image_size, final_image_size))
     return image
+
+
+def load_dataset_input_target(
+    data_split_image_ids: list, data_split_labels: list, final_image_size: int, n_channels: int, n_classes: int
+) -> tuple:
+    """Loads current data split's input and target data as tensor.
+
+    Args:
+        data_split_image_ids: A list which contains image ids in the current data split.
+        data_split_labels: A list which contains labels in the current data split.
+        final_image_size: An integer which contains the size of the final input image.
+        n_channels: An integer which contains the number of channels in the read image.
+        n_classes: An integer which contains the number of classes in the dataset.
+    
+    Returns:
+        A tuple which contains tensors for the input and target data.
+    """
+    input_data, target_data = list(), list()
+
+    # Iterates across image ids and labels in the dataset for current data split.
+    for image_id, label in zip(data_split_image_ids, data_split_labels):
+
+        # Loads processed image for current image id.
+        input_image = load_preprocess_image(image_id, final_image_size, n_channels)
+
+        # Creates an one-hot encoded list for current label.
+        encoded_label = [1 if index == label else 0 for index in range(len(n_classes))]
+
+        # Appends image and encoded label for current image to main lists.
+        input_data.append(input_image)
+        target_data.append(encoded_label)
+    
+    # Converts list into tensor.
+    input_data = tf.convert_to_tensor(input_data, dtype=tf.uint8)
+    target_data = tf.convert_to_tensor(target_data, dtype=tf.uint8)
+    return input_data, target_data
