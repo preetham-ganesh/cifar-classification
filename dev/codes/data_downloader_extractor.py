@@ -115,5 +115,5 @@ if __name__ == '__main__':
     revision = 0
     global version
     version = '{}.{}.{}'.format(major_version, minor_version, revision)
-    create_log('logs/data_download/', 'model_training_testing_v{}.log'.format(version))
+    create_log('logs', 'data_downloader_extractor_v{}.log'.format(version))
     main()
