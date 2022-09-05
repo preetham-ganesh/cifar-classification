@@ -177,3 +177,22 @@ def load_dataset_input_target(
     input_data = tf.convert_to_tensor(input_data, dtype=tf.uint8)
     target_data = tf.convert_to_tensor(target_data, dtype=tf.uint8)
     return input_data, target_data
+
+
+def shuffle_slice_dataset(input_data: list, target_data: list, batch_size: int) -> tf.data.Dataset:
+    """Converts the input data and target data into tensorflow dataset and slices them based on batch size.
+
+    Args:
+        input_data: A list which contains the current data split's resized input images.
+        target_data: A list which contains the current data split's resized target images.
+        batch_size: An integer which contains batch size for slicing the dataset into small chunks.
+
+    Returns:
+        A TensorFlow dataset which contains sliced input and target tensors for the current data split.
+    """
+    # Zip input and output tensors into a single dataset and shuffles it.
+    dataset = tf.data.Dataset.from_tensor_slices((input_data, target_data)).shuffle(len(input_data))
+
+    # Slices the combined dataset based on batch size, and drops remainder values.
+    dataset = dataset.batch(batch_size, drop_remainder=True)
+    return dataset
