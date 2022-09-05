@@ -57,6 +57,7 @@ class CifarImageRecognition(tf.keras.Model):
                 self.model_layers[layer_name] = tf.keras.layers.Flatten()
             
             # If layer's name is like 'globalaveragepool2d_', a Global Average Pooling 2D layer is initialized.
+            elif layer_name.split('_')[0] == 'globalaveragepooling2d':
                 self.model_layers[layer_name] = tf.keras.layers.GlobalAveragePooling2D()
 
     def call(self, x: tf.Tensor, training: bool) -> tf.Tensor:
