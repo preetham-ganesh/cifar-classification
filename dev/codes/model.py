@@ -1,6 +1,6 @@
 # authors_name = 'Preetham Ganesh'
 # project_title = 'Comparison on approaches towards classification of CIFAR-100 dataset'
-# email = 'preetham.ganesh2015@gmail.com'
+# email = 'preetham.ganesh2021@gmail.com'
 
 
 import tensorflow as tf
