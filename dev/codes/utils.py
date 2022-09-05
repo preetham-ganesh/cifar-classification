@@ -125,11 +125,11 @@ def load_json_file(file_name: str, directory_path: str) -> dict:
     return dictionary
 
 
-def load_images_information(extracted_data_version: str) -> tuple:
+def load_images_information(extracted_dataset_version: str) -> tuple:
     """Loads extracted images information for all data splits in the dataset.
 
     Args:
-        extracted_data_version: A string which contains the version of the extracted data.
+        extracted_dataset_version: A string which contains the version of the extracted data.
     
     Returns:
         A tuple which contains the extracted images information for train, validation and test data splits in the 
@@ -137,29 +137,26 @@ def load_images_information(extracted_data_version: str) -> tuple:
     """
     home_directory_path = os.path.dirname(os.getcwd())
     images_information_directory_path = '{}/data/extracted_data/v{}/labels'.format(
-        home_directory_path, extracted_data_version
+        home_directory_path, extracted_dataset_version
     )
 
     # Reads images information for all data splits in the dataset.
-    train_images_information = pd.read_csv('{}/train.csv'.format(
-        images_information_directory_path, extracted_data_version
-    ))
-    validation_images_information = pd.read_csv('{}/validation.csv'.format(
-        images_information_directory_path, extracted_data_version
-    ))
-    test_images_information = pd.read_csv('{}/test.csv'.format(
-        images_information_directory_path, extracted_data_version
-    ))
+    train_images_information = pd.read_csv('{}/train.csv'.format(images_information_directory_path))
+    validation_images_information = pd.read_csv('{}/validation.csv'.format(images_information_directory_path))
+    test_images_information = pd.read_csv('{}/test.csv'.format(images_information_directory_path))
     return train_images_information, validation_images_information, test_images_information
 
 
-def load_preprocess_image(image_id: str, final_image_size: int, n_channels: int) -> tf.Tensor:
+def load_preprocess_image(
+    image_id: str, final_image_size: int, n_channels: int, extracted_dataset_version: str
+) -> tf.Tensor:
     """Loads the image and preprocesses it, for the current image id and other parameters.
 
     Args:
         image_id: A string which contains name of the current image.
         final_image_size: An integer which contains the size of the final input image.
         n_channels: An integer which contains the number of channels in the read image.
+        extracted_dataset_version: A string which contains the version of the extracted data.
     
     Returns:
         A tensor which contains processed image for current image id.
@@ -167,7 +164,9 @@ def load_preprocess_image(image_id: str, final_image_size: int, n_channels: int)
     home_directory_path = os.path.dirname(os.getcwd())
 
     # Reads image as bytes for current image id. Converts it into RGB format.
-    image = tf.io.read_file('{}/data/extracted_data/images/{}.png'.format(home_directory_path, image_id))
+    image = tf.io.read_file('{}/data/extracted_data/v{}/images/{}.png'.format(
+        home_directory_path, extracted_dataset_version, image_id
+    ))
     image = tf.image.decode_jpeg(image, channels=n_channels)
 
     # Resizes image based on final image size.
@@ -177,7 +176,8 @@ def load_preprocess_image(image_id: str, final_image_size: int, n_channels: int)
 
 
 def load_dataset_input_target(
-    data_split_image_ids: list, data_split_labels: list, final_image_size: int, n_channels: int, n_classes: int
+    data_split_image_ids: list, data_split_labels: list, final_image_size: int, n_channels: int, n_classes: int,
+    extracted_dataset_version: str
 ) -> tuple:
     """Loads current data split's input and target data as tensor.
 
@@ -187,6 +187,7 @@ def load_dataset_input_target(
         final_image_size: An integer which contains the size of the final input image.
         n_channels: An integer which contains the number of channels in the read image.
         n_classes: An integer which contains the number of classes in the dataset.
+        extracted_dataset_version: A string which contains the version of the extracted data.
     
     Returns:
         A tuple which contains tensors for the input and target data.
@@ -197,10 +198,10 @@ def load_dataset_input_target(
     for image_id, label in zip(data_split_image_ids, data_split_labels):
 
         # Loads processed image for current image id.
-        input_image = load_preprocess_image(image_id, final_image_size, n_channels)
+        input_image = load_preprocess_image(image_id, final_image_size, n_channels, extracted_dataset_version)
 
         # Creates an one-hot encoded list for current label.
-        encoded_label = [1 if index == label else 0 for index in range(len(n_classes))]
+        encoded_label = [1 if index == label else 0 for index in range(n_classes)]
 
         # Appends image and encoded label for current image to main lists.
         input_data.append(input_image)
@@ -375,7 +376,7 @@ def generate_model_history_plot(split_history_dataframe: pd.DataFrame, metric_na
     plt.grid(color='black', linestyle='-.', linewidth=2, alpha=0.3)
 
     # Saves plot using the following path.
-    home_directory_path = os.path.dirname(os.path.dirname(os.getcwd()))
+    home_directory_path = os.path.dirname(os.getcwd())
     plt.savefig('{}/results/v{}/utils/model_history_{}.png'.format(home_directory_path, version, metric_name))
     plt.close()
 
@@ -395,7 +396,7 @@ def model_training_validation(
         None.
     """
     global model, train_loss, validation_loss, train_accuracy, validation_accuracy
-    home_directory_path = os.path.dirname(os.path.dirname(os.getcwd()))
+    home_directory_path = os.path.dirname(os.getcwd())
 
     # Tensorflow metrics which computes the mean of all the elements.
     train_loss = tf.keras.metrics.Mean(name='train_loss')
@@ -556,7 +557,7 @@ def model_testing(test_dataset: tf.data.Dataset, model_configuration: dict) -> N
         None.
     """
     global model, validation_loss, validation_accuracy
-    home_directory_path = os.path.dirname(os.path.dirname(os.getcwd()))
+    home_directory_path = os.path.dirname(os.getcwd())
 
     # Tensorflow metrics which computes the mean of all the elements.
     validation_loss = tf.keras.metrics.Mean(name='validation_loss')
