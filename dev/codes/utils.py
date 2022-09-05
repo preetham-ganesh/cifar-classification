@@ -5,8 +5,21 @@
 
 import os
 import logging
+import warnings
+
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+logging.getLogger('tensorflow').setLevel(logging.FATAL)
+warnings.filterwarnings("ignore")
+
 
 import json
+import tensorflow as tf
+import cv2
+
+
+physical_devices = tf.config.list_physical_devices('GPU')
+tf.config.experimental.set_memory_growth(physical_devices[0], enable=True)
 
 
 def check_directory_path_existence(directory_path: str) -> str:
@@ -105,3 +118,26 @@ def load_json_file(file_name: str, directory_path: str) -> dict:
         dictionary = json.load(out_file)
     out_file.close()
     return dictionary
+
+
+def load_preprocess_image(image_id: str, final_image_size: int, n_channels: int) -> tf.Tensor:
+    """Loads the image and preprocesses it, for the current image id and other parameters.
+
+    Args:
+        image_id: A string which contains name of the current image.
+        final_image_size: An integer which contains the size of the final input image.
+        n_channels: An integer which contains the number of channels in the read image.
+    
+    Returns:
+        A tensor which contains processed image for current image id.
+    """
+    home_directory_path = os.path.dirname(os.getcwd())
+
+    # Reads image as bytes for current image id. Converts it into RGB format.
+    image = tf.io.read_file('{}/data/extracted_data/images/{}.png'.format(home_directory_path, image_id))
+    image = tf.image.decode_jpeg(image, channels=n_channels)
+
+    # Resizes image based on final image size.
+    if image.shape[0] > final_image_size or image.shape[1] > final_image_size:
+        image = tf.image.resize(image, (final_image_size, final_image_size))
+    return image
