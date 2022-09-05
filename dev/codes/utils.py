@@ -125,6 +125,34 @@ def load_json_file(file_name: str, directory_path: str) -> dict:
     return dictionary
 
 
+def load_images_information(extracted_data_version: str) -> tuple:
+    """Loads extracted images information for all data splits in the dataset.
+
+    Args:
+        extracted_data_version: A string which contains the version of the extracted data.
+    
+    Returns:
+        A tuple which contains the extracted images information for train, validation and test data splits in the 
+            dataset.
+    """
+    home_directory_path = os.path.dirname(os.getcwd())
+    images_information_directory_path = '{}/data/extracted_data/v{}/labels'.format(
+        home_directory_path, extracted_data_version
+    )
+
+    # Reads images information for all data splits in the dataset.
+    train_images_information = pd.read_csv('{}/train.csv'.format(
+        images_information_directory_path, extracted_data_version
+    ))
+    validation_images_information = pd.read_csv('{}/validation.csv'.format(
+        images_information_directory_path, extracted_data_version
+    ))
+    test_images_information = pd.read_csv('{}/test.csv'.format(
+        images_information_directory_path, extracted_data_version
+    ))
+    return train_images_information, validation_images_information, test_images_information
+
+
 def load_preprocess_image(image_id: str, final_image_size: int, n_channels: int) -> tf.Tensor:
     """Loads the image and preprocesses it, for the current image id and other parameters.
 
