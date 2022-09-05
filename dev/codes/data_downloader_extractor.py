@@ -59,11 +59,10 @@ def data_downloader_extractor(data_split: str) -> None:
     )
     log_information('')
     log_information('Downloaded the CIFAR-100 dataset for {} data split.'.format(data_split))
-    log_information('')
 
     # Creates the following directory paths if it does not exist.
-    extracted_images_directory_path = check_directory_path_existence('data/extracted_data/images')
-    extracted_labels_directory_path = check_directory_path_existence('data/extracted_data/labels')
+    extracted_images_directory_path = check_directory_path_existence('data/extracted_data/v{}/images'.format(version))
+    extracted_labels_directory_path = check_directory_path_existence('data/extracted_data/v{}/labels'.format(version))
 
     # Computes the number of images already saved in the directory.
     n_images_saved = len(os.listdir(extracted_images_directory_path))
@@ -99,6 +98,10 @@ def data_downloader_extractor(data_split: str) -> None:
         )
         test_image_information_df.to_csv('{}/{}.csv'.format(extracted_labels_directory_path, 'test'), index=False)
     
+    log_information('')
+    log_information('Extracted the CIFAR-100 dataset for {} data split.'.format(data_split))
+    log_information('')
+    
 
 def main():
     log_information('')
@@ -108,7 +111,7 @@ def main():
 
 if __name__ == '__main__':
     major_version = 1
-    minor_version = 0
+    minor_version = 1
     revision = 0
     global version
     version = '{}.{}.{}'.format(major_version, minor_version, revision)
