@@ -39,7 +39,7 @@ class CifarImageRecognition(tf.keras.Model):
             # If layer's name is like 'maxpool2d_', a MaxPool2D layer is initialized based on layer configuration.
             elif layer_name.split('_')[0] == 'maxpool2d':
                 self.model_layers[layer_name] = tf.keras.layers.MaxPool2D(
-                    pool_size=current_layer_configuration['pool_size']
+                    pool_size=current_layer_configuration['pool_size'], strides=current_layer_configuration['strides']
                 )
             
             # If layer's name is like 'dropout_', a Dropout layer is initialized based on layer configuration.
@@ -57,7 +57,7 @@ class CifarImageRecognition(tf.keras.Model):
                 self.model_layers[layer_name] = tf.keras.layers.Flatten()
             
             # If layer's name is like 'globalaveragepool2d_', a Global Average Pooling 2D layer is initialized.
-            elif layer_name.split('_')[0] == 'globalaveragepooling2d':
+            elif layer_name.split('_')[0] == 'globalaveragepool2d':
                 self.model_layers[layer_name] = tf.keras.layers.GlobalAveragePooling2D()
 
     def call(self, x: tf.Tensor, training: bool) -> tf.Tensor:

@@ -58,54 +58,47 @@ def main():
         'test_steps_per_epoch': len(test_input_data) // batch_size, 'classes': classes,
         'layers_arrangement': [
             'conv2d_0', 'conv2d_1', 'maxpool2d_0', 'dropout_0', 'conv2d_2', 'conv2d_3', 'maxpool2d_1', 'dropout_1',
-            'flatten', 'dense_0', 'dropout_2', 'dense_1', 'dropout_3', 'dense_2', 'dropout_4', 'dense_3'
-        ],
-        'layers_start_index': 0,
-        'layers_configuration': {
-            'conv2d_0': {
-                'filters': 64, 'kernel': 3, 'padding': 'same', 'activation': 'relu', 'strides': (1, 1),
-                'kernel_initializer': 'glorot_uniform'
-            },
-            'conv2d_1': {
-                'filters': 64, 'kernel': 3, 'padding': 'same', 'activation': 'relu', 'strides': (1, 1),
-                'kernel_initializer': 'glorot_uniform'
-            },
-            'maxpool2d_0': {'pool_size': (2, 2)},
-            'dropout_0': {'rate': 0.3},
-            'conv2d_2': {
-                'filters': 128, 'kernel': 3, 'padding': 'same', 'activation': 'relu', 'strides': (1, 1),
-                'kernel_initializer': 'glorot_uniform'
-            },
-            'conv2d_3': {
-                'filters': 128, 'kernel': 3, 'padding': 'same', 'activation': 'relu', 'strides': (1, 1),
-                'kernel_initializer': 'glorot_uniform'
-            },
-            'maxpool2d_1': {'pool_size': (2, 2)},
-            'dropout_1': {'rate': 0.3},
-            'conv2d_4': {
-                'filters': 256, 'kernel': 3, 'padding': 'same', 'activation': 'relu', 'strides': (1, 1),
-                'kernel_initializer': 'glorot_uniform'
-            },
-            'conv2d_5': {
-                'filters': 256, 'kernel': 3, 'padding': 'same', 'activation': 'relu', 'strides': (1, 1),
-                'kernel_initializer': 'glorot_uniform'
-            },
-            'maxpool2d_2': {'pool_size': (2, 2)},
-            'dropout_2': {'rate': 0.3},
-            'conv2d_6': {
-                'filters': 512, 'kernel': 3, 'padding': 'same', 'activation': 'relu', 'strides': (1, 1),
-                'kernel_initializer': 'glorot_uniform'
-            },
-            'conv2d_7': {
-                'filters': 512, 'kernel': 3, 'padding': 'same', 'activation': 'relu', 'strides': (1, 1),
-                'kernel_initializer': 'glorot_uniform'
-            },
-            'maxpool2d_3': {'pool_size': (2, 2)},
-            'dropout_3': {'rate': 0.3},
-            'globalaveragepool2d_0': {},
-            'dense_0': {'units': 256, 'activation': 'relu'},
-            'dropout_4': {'rate': 0.3},
-            'dense_1': {'units': len(classes), 'activation': 'softmax'}
+            'conv2d_4', 'conv2d_5', 'maxpool2d_2', 'dropout_2', 'flatten', 'dense_0', 'dropout_3', 'dense_1', 
+            'dropout_4', 'dense_2'
+         ],
+         'layers_start_index': 0,
+         'layers_configuration': {
+             'conv2d_0': {
+                 'filters': 128, 'kernel': 3, 'padding': 'same', 'activation': 'relu', 'strides': (1, 1),
+                 'kernel_initializer': 'glorot_uniform'
+             },
+             'conv2d_1': {
+                 'filters': 128, 'kernel': 3, 'padding': 'same', 'activation': 'relu', 'strides': (1, 1),
+                 'kernel_initializer': 'glorot_uniform'
+             },
+             'maxpool2d_0': {'pool_size': (2, 2), 'strides': (2, 2)},
+             'dropout_0': {'rate': 0.4},
+             'conv2d_2': {
+                 'filters': 256, 'kernel': 3, 'padding': 'same', 'activation': 'relu', 'strides': (1, 1),
+                 'kernel_initializer': 'glorot_uniform'
+             },
+             'conv2d_3': {
+                 'filters': 256, 'kernel': 3, 'padding': 'same', 'activation': 'relu', 'strides': (1, 1),
+                 'kernel_initializer': 'glorot_uniform'
+             },
+             'maxpool2d_1': {'pool_size': (2, 2), 'strides': (2, 2)},
+             'dropout_1': {'rate': 0.4},
+             'conv2d_4': {
+                 'filters': 512, 'kernel': 3, 'padding': 'same', 'activation': 'relu', 'strides': (1, 1),
+                 'kernel_initializer': 'glorot_uniform'
+             },
+             'conv2d_5': {
+                 'filters': 512, 'kernel': 3, 'padding': 'same', 'activation': 'relu', 'strides': (1, 1),
+                 'kernel_initializer': 'glorot_uniform'
+             },
+             'maxpool2d_2': {'pool_size': (2, 2), 'strides': (2, 2)},
+             'dropout_2': {'rate': 0.4},
+             'flatten': {},
+             'dense_0': {'units': 1024, 'activation': 'relu'},
+             'dropout_3': {'rate': 0.4},
+             'dense_1': {'units': 1024, 'activation': 'relu'},
+             'dropout_4': {'rate': 0.4},
+             'dense_2': {'units': len(classes), 'activation': 'softmax'}
         }
     }
 
@@ -138,8 +131,8 @@ def main():
 
 if __name__ == '__main__':
     major_version = 1
-    minor_version = 4
-    revision = 0
+    minor_version = 5
+    revision = 1
     global version
     version = '{}.{}.{}'.format(major_version, minor_version, revision)
     create_log('logs', 'model_training_testing_v{}.log'.format(version))
