@@ -1,1 +1,1 @@
-# cifar-classification
+[![Developed by Preetham Ganesh](https://img.shields.io/badge/Developed%20by-Preetham%20Ganesh-blue)](https://preethamganesh.com)
