@@ -118,3 +118,28 @@ class Model(tf.keras.Model):
             )
         ]
         return tf.keras.Model(inputs=inputs, outputs=self.call(inputs))
+
+
+class CifarClassificationCNN(tf.Module):
+    """Recognizes object in an image."""
+
+    def __init__(self, model_configuration: Dict[str, Any]) -> None:
+        """Initializes components in the module.
+
+        Initializes components in the module.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+        """
+        super().__init__()
+
+        # Asserts type of input arguments.
+        assert isinstance(
+            model_configuration, dict
+        ), "Variable model_configuration should be of type 'dict'."
+
+        # Initializes class variables.
+        self.model_configuration = model_configuration
