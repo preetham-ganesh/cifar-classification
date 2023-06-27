@@ -21,6 +21,7 @@ from src.utils import load_json_file
 from src.utils import create_log
 from src.utils import add_to_log
 from src.utils import set_physical_devices_memory_limit
+from src.cifar_classification.model import CifarClassificationCNN
 
 
 def load_model_configuration(model_version: str) -> Dict[str, Any]:
@@ -66,6 +67,24 @@ def main():
     # Loads the model configuration file for current version.
     model_configuration = load_model_configuration(args.model_version)
     add_to_log("Finished loading model configuration for current version.")
+    add_to_log("")
+
+    # Creates an object for DigitRecognitionCNN class.
+    cifar_classification = CifarClassificationCNN(model_configuration)
+
+    # Loads model & other utilities for training it.
+    cifar_classification.load_model()
+    add_to_log("Finished loading model for current model configuration.")
+    add_to_log("")
+
+    # Generates summary and plot for loaded model.
+    (
+        model_summary,
+        model_plot_path,
+    ) = cifar_classification.generate_model_summary_and_plot()
+    add_to_log(model_summary)
+    add_to_log("")
+    add_to_log("Model plot saved at {}.".format(model_plot_path))
     add_to_log("")
 
 
