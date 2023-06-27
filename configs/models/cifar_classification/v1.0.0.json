@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "epochs": 20,
+  "batch_size": 64,
+  "final_image_width": 28,
+  "final_image_height": 28,
+  "n_channels": 3,
+  "validation_data_percentage": 0.05,
+  "test_data_percentage": 0.05,
+  "n_classes": 100
+}
