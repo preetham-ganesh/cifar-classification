@@ -40,8 +40,10 @@ class Model(tf.keras.Model):
 
         # Iterates across layers in the layers arrangement.
         self.model_layers = dict()
-        for name in self.model_configuration["digit_recognition"]["arrangement"]:
-            layer = self.model_configuration["digit_recognition"]["configuration"][name]
+        for name in self.model_configuration["cifar_classification"]["arrangement"]:
+            layer = self.model_configuration["cifar_classification"]["configuration"][
+                name
+            ]
 
             # If layer's name is like 'conv2d_', a Conv2D layer is initialized based on layer configuration.
             if name.split("_")[0] == "conv2d":
@@ -78,3 +80,27 @@ class Model(tf.keras.Model):
             # If layer's name is like 'flatten_', a Flatten layer is initialized.
             elif name.split("_")[0] == "flatten":
                 self.model_layers[name] = tf.keras.layers.Flatten(name=name)
+
+    def call(self, inputs: List[tf.Tensor], training: bool = False) -> tf.Tensor:
+        """Input tensor is passed through the layers in the model.
+
+        Input tensor is passed through the layers in the model.
+
+        Args:
+            inputs: A list of tensors containing inputs for
+        """
+        # Asserts type & values of the input arguments.
+        assert isinstance(inputs, list), "Variable inputs should be of type 'list'."
+        assert isinstance(training, bool), "Variable training should be of type 'bool'."
+
+        # Iterates across the layers arrangement, and predicts the output for each layer.
+        x = inputs[0]
+        for name in self.model_configuration["cifar_classification"]["arrangement"]:
+            # If layer's name is like 'dropout_', the following output is predicted.
+            if name.split("_")[0] == "dropout":
+                x = self.model_layers[name](x, training=training)
+
+            # Else, the following output is predicted.
+            else:
+                x = self.model_layers[name](x)
+        return x
