@@ -143,3 +143,42 @@ class CifarClassificationCNN(tf.Module):
 
         # Initializes class variables.
         self.model_configuration = model_configuration
+
+    def load_model(self) -> None:
+        """Loads model & other utilies for training it.
+
+        Loads model & other utilies for training it.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+        """
+        # Loads model for current model configuration.
+        self.model = Model(self.model_configuration)
+
+        # Based on the name & configuration, optimizer is initialized.
+        if (
+            self.model_configuration["cifar_classfication"]["optimizer"]["name"]
+            == "adam"
+        ):
+            self.optimizer = tf.keras.optimizers.Adam(
+                learning_rate=self.model_configuration["cifar_classfication"][
+                    "optimizer"
+                ]["learning_rate"]
+            )
+
+        # Creates checkpoint manager for the neural network model and loads the optimizer.
+        self.home_directory_path = os.getcwd()
+        self.checkpoint_directory_path = (
+            "{}/models/cifar_classfication/v{}/checkpoints".format(
+                self.home_directory_path, self.model_configuration["version"]
+            )
+        )
+        self.checkpoint = tf.train.Checkpoint(
+            optimizer=self.optimizer, model=self.model
+        )
+        self.manager = tf.train.CheckpointManager(
+            self.checkpoint, directory=self.checkpoint_directory_path, max_to_keep=3
+        )
