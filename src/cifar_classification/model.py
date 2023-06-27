@@ -131,7 +131,7 @@ class CifarClassificationCNN(tf.Module):
         Initializes components in the module.
 
         Args:
-            None.
+            model_configuration: A dictionary for the configuration of model's current version.
 
         Returns:
             None.
