@@ -12,6 +12,8 @@ sys.path.append(BASE_PATH)
 import tensorflow as tf
 from typing import Dict, Any, List
 
+from src.utils import check_directory_path_existence
+
 
 class Model(tf.keras.Model):
     """A tensorflow model to recognize object in an image."""
@@ -182,3 +184,43 @@ class CifarClassificationCNN(tf.Module):
         self.manager = tf.train.CheckpointManager(
             self.checkpoint, directory=self.checkpoint_directory_path, max_to_keep=3
         )
+
+    def generate_model_summary_and_plot(self, plot: bool) -> List[str]:
+        """Generates summary and plot for loaded model.
+
+        Generates summary and plot for loaded model.
+
+        Args:
+            pool: A boolean value to whether generate model plot or not.
+
+        Returns:
+            A list of strings for model summary and location where the model plot is saved.
+        """
+        # Builds plottable graph for the model.
+        model = self.model.build_graph()
+
+        # Compiles the model to log the model summary.
+        model_summary = list()
+        model.summary(print_fn=lambda x: model_summary.append(x))
+        model_summary = "\n".join(model_summary)
+
+        # Creates the following directory path if it does not exist.
+        self.reports_directory_path = check_directory_path_existence(
+            "models/digit_recognition/v{}/reports".format(
+                self.model_configuration["version"]
+            )
+        )
+
+        # Plots the model & saves it as a PNG file.
+        if plot:
+            model_plot_path = "{}/model.png".format(self.reports_directory_path)
+            tf.keras.utils.plot_model(
+                model,
+                model_plot_path,
+                show_shapes=True,
+                show_layer_names=True,
+                expand_nested=True,
+            )
+        else:
+            model_plot_path = ""
+        return [model_summary, model_plot_path]
