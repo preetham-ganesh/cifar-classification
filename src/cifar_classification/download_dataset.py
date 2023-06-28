@@ -30,3 +30,7 @@ def main():
     # Downloads the CIFAR-100 dataset, and saves the image and label information.
     download_extract_dataset("train", args.dataset_version)
     download_extract_dataset("test", args.dataset_version)
+
+
+if __name__ == "__main__":
+    main()
