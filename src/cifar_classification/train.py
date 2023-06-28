@@ -79,7 +79,7 @@ def main():
     # Downloads the CIFAR-100 dataset, and saves the image and label information.
     dataset.download_extract_data("train")
 
-    # Loads model & other utilities for training it.
+    """# Loads model & other utilities for training it.
     cifar_classification.load_model()
     add_to_log("Finished loading model for current model configuration.")
     add_to_log("")
@@ -92,7 +92,7 @@ def main():
     add_to_log(model_summary)
     add_to_log("")
     add_to_log("Model plot saved at {}.".format(model_plot_path))
-    add_to_log("")
+    add_to_log("")"""
 
 
 if __name__ == "__main__":
