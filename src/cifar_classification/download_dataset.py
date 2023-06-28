@@ -214,7 +214,9 @@ def download_extract_dataset(split: str, dataset_version: str) -> None:
         # Saves the current image information to the dictionary.
         images_information["image_id"].append(n_images_saved + index)
         images_information["label_id"].append(label_id.numpy())
-        images_information["label"].append(labels[label_id.numpy()])
+        images_information["labels"].append(labels[label_id.numpy()])
+        if index == 10:
+            break
 
     # Converts the dictionary into a dataframe.
     images_information = pd.DataFrame(images_information)
@@ -263,7 +265,7 @@ def main():
 
     # Downloads the CIFAR-100 dataset, and saves the image and label information.
     download_extract_dataset("train", args.dataset_version)
-    download_extract_dataset("test", args.dataset_version)
+    # download_extract_dataset("test", args.dataset_version)
 
 
 if __name__ == "__main__":
