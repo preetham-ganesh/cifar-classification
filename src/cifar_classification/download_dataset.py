@@ -257,7 +257,7 @@ def main():
 
     # Creates an logger object for storing terminal output.
     create_log(
-        "download_dataset_v{}".format(args.model_version), "logs/cifar_classification"
+        "download_dataset_v{}".format(args.dataset_version), "logs/cifar_classification"
     )
     add_to_log("")
 
