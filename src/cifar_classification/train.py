@@ -22,6 +22,7 @@ from src.utils import create_log
 from src.utils import add_to_log
 from src.utils import set_physical_devices_memory_limit
 from src.cifar_classification.model import CifarClassificationCNN
+from src.cifar_classification.dataset import Dataset
 
 
 def load_model_configuration(model_version: str) -> Dict[str, Any]:
@@ -71,6 +72,12 @@ def main():
 
     # Creates an object for DigitRecognitionCNN class.
     cifar_classification = CifarClassificationCNN(model_configuration)
+
+    # Creates an object for the Dataset class.
+    dataset = Dataset(model_configuration)
+
+    # Downloads the CIFAR-100 dataset, and saves the image and label information.
+    dataset.download_extract_data("train")
 
     # Loads model & other utilities for training it.
     cifar_classification.load_model()
