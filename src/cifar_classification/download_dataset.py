@@ -19,6 +19,7 @@ import tensorflow_datasets as tfds
 import cv2
 import pandas as pd
 
+from src.utils import create_log
 from src.utils import check_directory_path_existence
 from src.utils import add_to_log
 
@@ -253,6 +254,12 @@ def main():
         help="Version by which the downloaded & extracted dataset should be saved as.",
     )
     args = parser.parse_args()
+
+    # Creates an logger object for storing terminal output.
+    create_log(
+        "download_dataset_v{}".format(args.model_version), "logs/cifar_classification"
+    )
+    add_to_log("")
 
     # Downloads the CIFAR-100 dataset, and saves the image and label information.
     download_extract_dataset("train", args.dataset_version)
