@@ -18,6 +18,7 @@ logging.getLogger("tensorflow").setLevel(logging.FATAL)
 import tensorflow_datasets as tfds
 import cv2
 import pandas as pd
+import shutil
 
 from src.utils import create_log
 from src.utils import check_directory_path_existence
@@ -69,18 +70,18 @@ def download_extract_dataset(split: str, dataset_version: str) -> None:
     if split == "train":
         # Removes the directories for images & labels that were previously extracted.
         try:
-            os.rmdir(
+            shutil.rmtree(
                 "{}/data/extracted_data/cifar_100/v{}/images".format(
                     home_directory_path, dataset_version
                 )
             )
-            os.rmdir(
+            shutil.rmtree(
                 "{}/data/extracted_data/cifar_100/v{}/labels".format(
                     home_directory_path, dataset_version
                 )
             )
             add_to_log("Images & labels that were previously extracted, will deleted.")
-        except OSError:
+        except FileNotFoundError:
             add_to_log("Images & labels were not previously extracted.")
         add_to_log("")
 
