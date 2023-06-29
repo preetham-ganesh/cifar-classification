@@ -217,9 +217,6 @@ def download_extract_dataset(split: str, dataset_version: str) -> None:
         images_information["label_id"].append(label_id.numpy())
         images_information["labels"].append(labels[label_id.numpy()])
 
-        if index == 5:
-            break
-
     # Converts the dictionary into a dataframe.
     images_information = pd.DataFrame(images_information)
 
