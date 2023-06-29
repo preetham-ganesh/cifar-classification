@@ -207,17 +207,16 @@ def download_extract_dataset(split: str, dataset_version: str) -> None:
     for index, (image, label_id) in enumerate(dataset.take(n_examples)):
         # Converts the image into a NumPy array, and saves it as PNG file.
         cv2.imwrite(
-            "{}/{}.png".format(
-                extracted_images_directory_path, n_images_saved + index + 1
-            ),
+            "{}/{}.png".format(extracted_images_directory_path, n_images_saved + index),
             image.numpy(),
         )
 
         # Saves the current image information to the dictionary.
-        images_information["image_id"].append(n_images_saved + index + 1)
+        images_information["image_id"].append(n_images_saved + index)
         images_information["label_id"].append(label_id.numpy())
         images_information["labels"].append(labels[label_id.numpy()])
-        if index == 10:
+
+        if index == 5:
             break
 
     # Converts the dictionary into a dataframe.
@@ -266,7 +265,7 @@ def main():
 
     # Downloads the CIFAR-100 dataset, and saves the image and label information.
     download_extract_dataset("train", args.dataset_version)
-    # download_extract_dataset("test", args.dataset_version)
+    download_extract_dataset("test", args.dataset_version)
 
 
 if __name__ == "__main__":
