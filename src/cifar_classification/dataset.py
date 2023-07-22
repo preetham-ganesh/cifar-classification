@@ -6,6 +6,8 @@ import os
 from typing import Dict, Any
 import pandas as pd
 
+from src.utils import add_to_log
+
 
 class Dataset(object):
     """Loads the dataset based on model configuration."""
@@ -55,4 +57,21 @@ class Dataset(object):
             "{}/data/extracted_data/cifar_100/v{}/labels/test.csv".format(
                 self.home_directory_path, self.model_configuration["dataset_version"]
             )
+        )
+
+        # Computes no. of examples in each data split.
+        self.n_train_examples = len(self.train_data)
+        self.n_validation_examples = len(self.validation_data)
+        self.n_test_examples = len(self.test_data)
+
+        add_to_log(
+            "No. of images in the training data: {}".format(self.n_train_examples)
+        )
+        add_to_log(
+            "No. of images in the validation data: {}".format(
+                self.n_validation_examples
+            )
+        )
+        add_to_log(
+            "No. of images in the validation data: {}".format(self.n_test_examples)
         )
