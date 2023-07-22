@@ -46,6 +46,25 @@ class Train(object):
         self.model_version = model_version
         self.best_validation_loss = None
 
+    def load_model_configuration(self) -> None:
+        """Loads the model configuration file for current version.
+
+        Loads the model configuration file for current version.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+        """
+        self.home_directory_path = os.getcwd()
+        model_configuration_directory_path = (
+            "{}/configs/models/cifar_classification".format(self.home_directory_path)
+        )
+        self.model_configuration = load_json_file(
+            "v{}".format(self.model_version), model_configuration_directory_path
+        )
+
 
 def load_model_configuration(model_version: str) -> Dict[str, Any]:
     """Loads the model configuration file for current version.
