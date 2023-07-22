@@ -25,6 +25,28 @@ from src.cifar_classification.model import CifarClassificationCNN
 from src.cifar_classification.dataset import Dataset
 
 
+class Train(object):
+    """Trains the Cifar classification CNN model based on model configuration."""
+
+    def __init__(self, model_version: str) -> None:
+        """Creates object attributes for the Train class.
+
+        Creates object attributes for the Train class.
+
+        Args:
+            model_version: A string for the version of the model to be trained.
+
+        Returns:
+            None.
+        """
+        # Asserts type & value of the arguments.
+        assert isinstance(model_version, str), "Variable model_version of type 'str'."
+
+        # Initalizes class variables.
+        self.model_version = model_version
+        self.best_validation_loss = None
+
+
 def load_model_configuration(model_version: str) -> Dict[str, Any]:
     """Loads the model configuration file for current version.
 
