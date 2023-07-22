@@ -2,21 +2,9 @@
 
 
 import os
-import sys
-import warnings
-
-
-BASE_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path.append(BASE_PATH)
-warnings.filterwarnings("ignore")
-
 
 from typing import Dict, Any
-import tensorflow_datasets as tfds
-import cv2
-
-from src.utils import check_directory_path_existence
-from src.utils import add_to_log
+import pandas as pd
 
 
 class Dataset(object):
@@ -40,3 +28,31 @@ class Dataset(object):
 
         # Initalizes class variables.
         self.model_configuration = model_configuration
+
+    def load_data(self) -> None:
+        """Loads the training, validation, and testing labels created when downloading the dataset.
+
+        Loads the training, validation, and testing labels created when downloading the dataset.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+        """
+        self.home_directory_path = os.getcwd()
+        self.train_data = pd.read_csv(
+            "{}/data/extracted_data/cifar_100/v{}/labels/train.csv".format(
+                self.home_directory_path, self.model_configuration["dataset_version"]
+            )
+        )
+        self.validation_data = pd.read_csv(
+            "{}/data/extracted_data/cifar_100/v{}/labels/validation.csv".format(
+                self.home_directory_path, self.model_configuration["dataset_version"]
+            )
+        )
+        self.test_data = pd.read_csv(
+            "{}/data/extracted_data/cifar_100/v{}/labels/test.csv".format(
+                self.home_directory_path, self.model_configuration["dataset_version"]
+            )
+        )
