@@ -371,6 +371,22 @@ class Train(object):
         self.validation_loss(loss)
         self.validation_accuracy(accuracy)
 
+    def reset_trackers(self) -> None:
+        """Resets states for training and validation trackers before the start of each epoch.
+
+        Resets states for training and validation trackers before the start of each epoch.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+        """
+        self.train_loss.reset_states()
+        self.validation_loss.reset_states()
+        self.train_accuracy.reset_states()
+        self.validation_accuracy.reset_states()
+
 
 def main():
     # Parses the arguments.
