@@ -245,10 +245,10 @@ class Train(object):
         Returns:
             None.
         """
-        self.loss_object = tf.keras.losses.CategoricalCrossentropy(
+        self.loss_object = tf.keras.losses.SparseCategoricalCrossentropy(
             from_logits=True, reduction="none"
         )
-        self.accuracy_object = tf.keras.metrics.CategoricalAccuracy()
+        self.accuracy_object = tf.keras.metrics.SparseCategoricalAccuracy()
 
     def compute_loss(
         self, target_batch: tf.Tensor, predicted_batch: tf.Tensor
@@ -273,11 +273,37 @@ class Train(object):
         ), "Variable predicted_batch should be of type 'tf.Tensor'."
 
         # Computes loss for the current batch using actual values and predicted values.
-        self.loss_object = tf.keras.losses.SparseCategoricalCrossentropy(
-            from_logits=True, reduction="none"
-        )
         loss = self.loss_object(target_batch, predicted_batch)
         return loss
+
+    def compute_accuracy(
+        self, target_batch: tf.Tensor, predicted_batch: tf.Tensor
+    ) -> tf.Tensor:
+        """Computes accuracy for the current batch using actual values and predicted values.
+
+        Computes accuracy for the current batch using actual values and predicted values.
+
+        Args:
+            target_batch: A tensor which contains the actual values for the current batch.
+            predicted_batch: A tensor which contains the predicted values for the current batch.
+
+        Returns:
+            A tensor for the accuracy of current batch.
+        """
+        # Asserts type & value of the arguments.
+        assert isinstance(
+            target_batch, tf.Tensor
+        ), "Variable target_batch should be of type 'tf.Tensor'."
+        assert isinstance(
+            predicted_batch, tf.Tensor
+        ), "Variable predicted_batch should be of type 'tf.Tensor'."
+
+        # Resets accuracy object's states.
+        self.accuracy_object.reset_state()
+
+        # Computes accuracy for the current batch using actual values and predicted values.
+        accuracy = self.accuracy_object(target_batch, predicted_batch)
+        return accuracy
 
 
 def main():
