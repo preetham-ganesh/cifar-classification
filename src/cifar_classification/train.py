@@ -109,19 +109,14 @@ def main():
     # Sets memory limit of GPU if found in the system.
     set_physical_devices_memory_limit()
 
-    # Loads the model configuration file for current version.
-    model_configuration = load_model_configuration(args.model_version)
-    add_to_log("Finished loading model configuration for current version.")
-    add_to_log("")
+    # Creates an object for the Train class.
+    trainer = Train(args.model_version)
 
-    # Creates an object for DigitRecognitionCNN class.
-    cifar_classification = CifarClassificationCNN(model_configuration)
+    # Loads model configuration for current model version.
+    trainer.load_model_configuration()
 
-    # Creates an object for the Dataset class.
-    dataset = Dataset(model_configuration)
-
-    # Downloads the CIFAR-100 dataset, and saves the image and label information.
-    dataset.download_extract_data("train")
+    # Loads dataset based on dataset version in the model configuration.
+    trainer.load_dataset()
 
     """# Loads model & other utilities for training it.
     cifar_classification.load_model()
