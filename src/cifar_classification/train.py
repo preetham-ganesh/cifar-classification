@@ -15,14 +15,13 @@ warnings.filterwarnings("ignore")
 logging.getLogger("tensorflow").setLevel(logging.FATAL)
 
 
-from typing import Dict, Any
-import numpy as np
+import tensorflow as tf
 
 from src.utils import load_json_file
 from src.utils import create_log
 from src.utils import add_to_log
 from src.utils import set_physical_devices_memory_limit
-from src.cifar_classification.model import CifarClassificationCNN
+from src.cifar_classification.model import Model
 from src.cifar_classification.dataset import Dataset
 
 
@@ -88,6 +87,45 @@ class Train(object):
 
         # Converts images id & label id into tensorflow dataset and slices them based on batch size.
         self.dataset.shuffle_slice_datasets()
+
+    def load_model(self) -> None:
+        """Loads model & other utilies for training it.
+
+        Loads model & other utilies for training it.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+        """
+        # Loads model for current model configuration.
+        self.model = Model(self.model_configuration)
+
+        # Based on the name & configuration, optimizer is initialized.
+        if (
+            self.model_configuration["cifar_classfication"]["optimizer"]["name"]
+            == "adam"
+        ):
+            self.optimizer = tf.keras.optimizers.Adam(
+                learning_rate=self.model_configuration["cifar_classfication"][
+                    "optimizer"
+                ]["learning_rate"]
+            )
+
+        # Creates checkpoint manager for the neural network model and loads the optimizer.
+        self.home_directory_path = os.getcwd()
+        self.checkpoint_directory_path = (
+            "{}/models/cifar_classfication/v{}/checkpoints".format(
+                self.home_directory_path, self.model_configuration["version"]
+            )
+        )
+        self.checkpoint = tf.train.Checkpoint(
+            optimizer=self.optimizer, model=self.model
+        )
+        self.manager = tf.train.CheckpointManager(
+            self.checkpoint, directory=self.checkpoint_directory_path, max_to_keep=3
+        )
 
 
 def main():
