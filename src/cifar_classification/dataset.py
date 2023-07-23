@@ -78,6 +78,28 @@ class Dataset(object):
         )
         add_to_log("")
 
+    def map_label_ids_names(self) -> Dict[str, str]:
+        """Creates a dictionary to store the unique label ids & names.
+
+        Creates a dictionary to store the unique label ids & names.
+
+        Args:
+            None.
+
+        Returns:
+            A dictionary for the unique label ids & names.
+        """
+        # Iterates across rows in the training data.
+        labels = {}
+        for index in range(self.n_train_examples):
+            # Extracts label id & name at current index.
+            id = self.train_data.iloc[index]["label_id"]
+            name = self.train_data.iloc[index]["label_name"]
+
+            # Adds the label id & name to the dictionary.
+            labels[str(id)] = name
+        return labels
+
     def shuffle_slice_datasets(self) -> None:
         """Converts images id & label id into tensorflow dataset and slices them based on batch size.
 
