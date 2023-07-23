@@ -83,6 +83,14 @@ class Model(tf.keras.Model):
             elif name.split("_")[0] == "flatten":
                 self.model_layers[name] = tf.keras.layers.Flatten(name=name)
 
+            # If layer's name is like 'resizing_', a Resizing layer is initialized.
+            elif name.split("_")[0] == "resizing":
+                self.model_layers[name] = tf.keras.layers.Resizing(
+                    height=layer["height"],
+                    width=layer["width"],
+                    interpolation=layer["interpolation"],
+                )
+
     def call(self, inputs: List[tf.Tensor], training: bool = False) -> tf.Tensor:
         """Input tensor is passed through the layers in the model.
 
