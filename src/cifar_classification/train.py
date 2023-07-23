@@ -254,6 +254,22 @@ class Train(object):
         # Saves the model history dictionary as a JSON file.
         save_json_file(self.model_history, "history", self.reports_directory_path)
 
+    def initialize_metrics(self) -> None:
+        """Initializes loss & metric function for training the model.
+
+        Initializes loss & metric function for training the model.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+        """
+        self.loss = tf.keras.losses.CategoricalCrossentropy(
+            from_logits=True, reduction="none"
+        )
+        self.accuracy = tf.keras.metrics.CategoricalAccuracy()
+
 
 def main():
     # Parses the arguments.
