@@ -171,9 +171,9 @@ class Train(object):
             add_to_log("")
 
     def initialize_model_history(self) -> None:
-        """Creates empty dataframe for saving the model's history.
+        """Creates dicionary for saving the model's history.
 
-        Creates empty dataframe for saving the model's epoch-wise training and validation metrics history.
+        Creates dictionary for saving the model's epoch-wise training and validation metrics history.
 
         Args:
             None.
@@ -181,19 +181,17 @@ class Train(object):
         Returns:
             None.
         """
-        self.model_history = pd.DataFrame(
-            columns=[
-                "epochs",
-                "train_loss",
-                "validation_loss",
-                "train_accuracy",
-                "validation_accuracy",
-                "train_precision",
-                "validation_precision",
-                "train_recall",
-                "validation_recall",
-            ]
-        )
+        self.model_history = {
+            "epoch": list(),
+            "train_loss": list(),
+            "validation_loss": list(),
+            "train_accuracy": list(),
+            "validation_accuracy": list(),
+            "train_precision": list(),
+            "validation_precision": list(),
+            "train_recall": list(),
+            "validation_recall": list(),
+        }
 
     def initialize_metric_trackers(self) -> None:
         """Initializes TensorFlow trackers which computes the mean of all elements.
@@ -214,6 +212,9 @@ class Train(object):
         self.validation_precision = tf.keras.metrics.Mean(name="validation_precision")
         self.train_recall = tf.keras.metrics.Mean(name="train_recall")
         self.validation_recall = tf.keras.metrics.Mean(name="validation_recall")
+
+    def update_model_history(self, epoch: int) -> None:
+        """"""
 
 
 def main():
