@@ -16,6 +16,7 @@ logging.getLogger("tensorflow").setLevel(logging.FATAL)
 
 
 from typing import Dict, Any
+import numpy as np
 
 from src.utils import load_json_file
 from src.utils import create_log
@@ -64,6 +65,29 @@ class Train(object):
         self.model_configuration = load_json_file(
             "v{}".format(self.model_version), model_configuration_directory_path
         )
+
+    def load_dataset(self) -> None:
+        """Loads dataset based on dataset version in the model configuration.
+
+        Loads dataset based on dataset version in the model configuration.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+        """
+        # Creates object attributes for the Dataset class.
+        self.dataset = Dataset(self.model_configuration)
+
+        # Loads the training, validation, and testing labels created when downloading the dataset.
+        self.dataset.load_data()
+
+        # Creates a dictionary to store the unique label ids & names.
+        self.model_configuration["labels"] = self.dataset.map_label_ids_names()
+
+        # Converts images id & label id into tensorflow dataset and slices them based on batch size.
+        self.dataset.shuffle_slice_datasets()
 
 
 def load_model_configuration(model_version: str) -> Dict[str, Any]:
