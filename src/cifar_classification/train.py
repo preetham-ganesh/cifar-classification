@@ -195,6 +195,26 @@ class Train(object):
             ]
         )
 
+    def initialize_metric_trackers(self) -> None:
+        """Initializes TensorFlow trackers which computes the mean of all elements.
+
+        Initializes TensorFlow trackers which computes the mean of all elements.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+        """
+        self.train_loss = tf.keras.metrics.Mean(name="train_loss")
+        self.validation_loss = tf.keras.metrics.Mean(name="validation_loss")
+        self.train_accuracy = tf.keras.metrics.Mean(name="train_accuracy")
+        self.validation_accuracy = tf.keras.metrics.Mean(name="validation_accuracy")
+        self.train_precision = tf.keras.metrics.Mean(name="train_precision")
+        self.validation_precision = tf.keras.metrics.Mean(name="validation_precision")
+        self.train_recall = tf.keras.metrics.Mean(name="train_recall")
+        self.validation_recall = tf.keras.metrics.Mean(name="validation_recall")
+
 
 def main():
     # Parses the arguments.
