@@ -6,6 +6,8 @@ import os
 from typing import Dict, Any
 import pandas as pd
 import tensorflow as tf
+import cv2
+import numpy as np
 
 from src.utils import add_to_log
 
@@ -165,3 +167,26 @@ class Dataset(object):
             "No. of test steps per epoch: {}".format(self.n_test_steps_per_epoch)
         )
         add_to_log("")
+
+    def load_image(self, image_id: str) -> np.ndarray:
+        """# Loads the PNG image for the current image id as a NumPy array.
+
+        # Loads the PNG image for the current image id as a NumPy array.
+
+        Args:
+            image_id: A string for the image id at current index.
+
+        Returns:
+            A NumPy array for the currently loaded image.
+        """
+        # Asserts type & value of the arguments.
+        assert isinstance(image_id, str), "Variable image_id should be of type 'str'."
+
+        # Loads the PNG image for the current image id as a NumPy array.
+        file_path = "{}/data/extracted_data/cifar_100/v{}/images/{}.png".format(
+            self.home_directory_path,
+            self.model_configuration["dataset_version"],
+            image_id,
+        )
+        image = cv2.imread(file_path)
+        return image
