@@ -1,18 +1,8 @@
 # Copyrights (c) Preetham Ganesh.
 
 
-import os
-import sys
-
-
-BASE_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path.append(BASE_PATH)
-
-
 import tensorflow as tf
 from typing import Dict, Any, List
-
-from src.utils import check_directory_path_existence
 
 
 class Model(tf.keras.Model):
@@ -91,17 +81,30 @@ class Model(tf.keras.Model):
                     interpolation=layer["interpolation"],
                 )
 
-    def call(self, inputs: List[tf.Tensor], training: bool = False) -> tf.Tensor:
+    def call(
+        self,
+        inputs: List[tf.Tensor],
+        training: bool = False,
+        masks: List[tf.Tensor] = None,
+    ) -> tf.Tensor:
         """Input tensor is passed through the layers in the model.
 
         Input tensor is passed through the layers in the model.
 
         Args:
-            inputs: A list of tensors containing inputs for
+            inputs: A list of tensors containing inputs for the model's prediction.
+            training: A boolean value for the flag of training/testing state.
+            masks: A list of tensors containing masks for the model's prediction.
+
+        Returns:
+            A tensor for the prediction from the model for the current inputs & masks.
         """
         # Asserts type & values of the input arguments.
         assert isinstance(inputs, list), "Variable inputs should be of type 'list'."
         assert isinstance(training, bool), "Variable training should be of type 'bool'."
+        assert (
+            isinstance(masks, list) or masks is None
+        ), "Variable masks should be of type 'list' or masks should have value as 'None'."
 
         # Iterates across the layers arrangement, and predicts the output for each layer.
         x = inputs[0]
