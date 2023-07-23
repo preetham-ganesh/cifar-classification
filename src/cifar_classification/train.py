@@ -25,6 +25,7 @@ from src.utils import set_physical_devices_memory_limit
 from src.cifar_classification.model import Model
 from src.cifar_classification.dataset import Dataset
 from src.utils import check_directory_path_existence
+from src.utils import save_json_file
 
 
 class Train(object):
@@ -214,7 +215,44 @@ class Train(object):
         self.validation_recall = tf.keras.metrics.Mean(name="validation_recall")
 
     def update_model_history(self, epoch: int) -> None:
-        """"""
+        """Updates model history dataframe with latest metrics & saves it as JSON file.
+
+        Updates model history dataframe with latest metrics & saves it as JSON file.
+
+        Args:
+            epoch: An integer for the current epoch.
+
+        Returns:
+            None.
+        """
+        self.model_history["epoch"].append(epoch + 1)
+        self.model_history["train_loss"].append(
+            str(round(self.train_loss.result().numpy(), 3))
+        )
+        self.model_history["validation_loss"].append(
+            str(round(self.validation_loss.result().numpy(), 3))
+        )
+        self.model_history["train_accuracy"].append(
+            str(round(self.train_accuracy.result().numpy(), 3))
+        )
+        self.model_history["validation_accuracy"].append(
+            str(round(self.validation_accuracy.result().numpy(), 3))
+        )
+        self.model_history["train_precision"].append(
+            str(round(self.train_precision.result().numpy(), 3))
+        )
+        self.model_history["validation_precision"].append(
+            str(round(self.validation_precision.result().numpy(), 3))
+        )
+        self.model_history["train_recall"].append(
+            str(round(self.train_recall.result().numpy(), 3))
+        )
+        self.model_history["validation_recall"].append(
+            str(round(self.validation_recall.result().numpy(), 3))
+        )
+
+        # Saves the model history dictionary as a JSON file.
+        save_json_file(self.model_history, "history", self.reports_directory_path)
 
 
 def main():
