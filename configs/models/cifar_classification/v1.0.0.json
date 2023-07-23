@@ -19,6 +19,10 @@
       "dense_1",
       "dense_2"
     ],
+    "optimizer": {
+      "name": "adam",
+      "learning_rate": 0.001
+    },
     "configuration": {
       "resizing_0": { "height": 32, "width": 32, "interpolation": "bilinear" },
       "conv2d_0": {
