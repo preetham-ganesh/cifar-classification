@@ -215,7 +215,7 @@ def download_extract_dataset(split: str, dataset_version: str) -> None:
         # Saves the current image information to the dictionary.
         images_information["image_id"].append(n_images_saved + index)
         images_information["label_id"].append(label_id.numpy())
-        images_information["labels"].append(labels[label_id.numpy()])
+        images_information["label_name"].append(labels[label_id.numpy()])
 
     # Converts the dictionary into a dataframe.
     images_information = pd.DataFrame(images_information)
