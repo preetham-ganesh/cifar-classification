@@ -16,7 +16,7 @@ logging.getLogger("tensorflow").setLevel(logging.FATAL)
 
 
 import tensorflow as tf
-from typing import List
+import pandas as pd
 
 from src.utils import load_json_file
 from src.utils import create_log
@@ -170,6 +170,31 @@ class Train(object):
             add_to_log("Model plot saved at {}.".format(model_plot_path))
             add_to_log("")
 
+    def initialize_model_history(self) -> None:
+        """Creates empty dataframe for saving the model's history.
+
+        Creates empty dataframe for saving the model's epoch-wise training and validation metrics history.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+        """
+        self.model_history = pd.DataFrame(
+            columns=[
+                "epochs",
+                "train_loss",
+                "validation_loss",
+                "train_accuracy",
+                "validation_accuracy",
+                "train_precision",
+                "validation_precision",
+                "train_recall",
+                "validation_recall",
+            ]
+        )
+
 
 def main():
     # Parses the arguments.
@@ -199,20 +224,11 @@ def main():
     # Loads dataset based on dataset version in the model configuration.
     trainer.load_dataset()
 
-    """# Loads model & other utilities for training it.
-    cifar_classification.load_model()
-    add_to_log("Finished loading model for current model configuration.")
-    add_to_log("")
+    # Loads model & other utilies for training it.
+    trainer.load_model()
 
     # Generates summary and plot for loaded model.
-    (
-        model_summary,
-        model_plot_path,
-    ) = cifar_classification.generate_model_summary_and_plot()
-    add_to_log(model_summary)
-    add_to_log("")
-    add_to_log("Model plot saved at {}.".format(model_plot_path))
-    add_to_log("")"""
+    trainer.generate_model_summary_and_plot()
 
 
 if __name__ == "__main__":
