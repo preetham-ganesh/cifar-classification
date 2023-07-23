@@ -188,10 +188,6 @@ class Train(object):
             "validation_loss": list(),
             "train_accuracy": list(),
             "validation_accuracy": list(),
-            "train_precision": list(),
-            "validation_precision": list(),
-            "train_recall": list(),
-            "validation_recall": list(),
         }
 
     def initialize_metric_trackers(self) -> None:
@@ -209,10 +205,6 @@ class Train(object):
         self.validation_loss = tf.keras.metrics.Mean(name="validation_loss")
         self.train_accuracy = tf.keras.metrics.Mean(name="train_accuracy")
         self.validation_accuracy = tf.keras.metrics.Mean(name="validation_accuracy")
-        self.train_precision = tf.keras.metrics.Mean(name="train_precision")
-        self.validation_precision = tf.keras.metrics.Mean(name="validation_precision")
-        self.train_recall = tf.keras.metrics.Mean(name="train_recall")
-        self.validation_recall = tf.keras.metrics.Mean(name="validation_recall")
 
     def update_model_history(self, epoch: int) -> None:
         """Updates model history dataframe with latest metrics & saves it as JSON file.
@@ -237,18 +229,6 @@ class Train(object):
         )
         self.model_history["validation_accuracy"].append(
             str(round(self.validation_accuracy.result().numpy(), 3))
-        )
-        self.model_history["train_precision"].append(
-            str(round(self.train_precision.result().numpy(), 3))
-        )
-        self.model_history["validation_precision"].append(
-            str(round(self.validation_precision.result().numpy(), 3))
-        )
-        self.model_history["train_recall"].append(
-            str(round(self.train_recall.result().numpy(), 3))
-        )
-        self.model_history["validation_recall"].append(
-            str(round(self.validation_recall.result().numpy(), 3))
         )
 
         # Saves the model history dictionary as a JSON file.
