@@ -16,6 +16,7 @@ logging.getLogger("tensorflow").setLevel(logging.FATAL)
 
 
 import tensorflow as tf
+from typing import List
 
 from src.utils import load_json_file
 from src.utils import create_log
@@ -23,6 +24,7 @@ from src.utils import add_to_log
 from src.utils import set_physical_devices_memory_limit
 from src.cifar_classification.model import Model
 from src.cifar_classification.dataset import Dataset
+from src.utils import check_directory_path_existence
 
 
 class Train(object):
@@ -126,6 +128,47 @@ class Train(object):
         self.manager = tf.train.CheckpointManager(
             self.checkpoint, directory=self.checkpoint_directory_path, max_to_keep=3
         )
+
+    def generate_model_summary_and_plot(self, plot: bool) -> None:
+        """Generates summary and plot for loaded model.
+
+        Generates summary and plot for loaded model.
+
+        Args:
+            pool: A boolean value to whether generate model plot or not.
+
+        Returns:
+            None.
+        """
+        # Builds plottable graph for the model.
+        model = self.model.build_graph()
+
+        # Compiles the model to log the model summary.
+        model_summary = list()
+        model.summary(print_fn=lambda x: model_summary.append(x))
+        model_summary = "\n".join(model_summary)
+        add_to_log(model_summary)
+        add_to_log("")
+
+        # Creates the following directory path if it does not exist.
+        self.reports_directory_path = check_directory_path_existence(
+            "models/cifar_classification/v{}/reports".format(
+                self.model_configuration["version"]
+            )
+        )
+
+        # Plots the model & saves it as a PNG file.
+        if plot:
+            model_plot_path = "{}/model.png".format(self.reports_directory_path)
+            tf.keras.utils.plot_model(
+                model,
+                model_plot_path,
+                show_shapes=True,
+                show_layer_names=True,
+                expand_nested=True,
+            )
+            add_to_log("Model plot saved at {}.".format(model_plot_path))
+            add_to_log("")
 
 
 def main():
