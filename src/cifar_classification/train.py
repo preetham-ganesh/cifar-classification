@@ -460,7 +460,7 @@ def main():
     trainer.load_model()
 
     # Generates summary and plot for loaded model.
-    trainer.generate_model_summary_and_plot()
+    trainer.generate_model_summary_and_plot(True)
 
     #
     trainer.train_model_per_epoch(1)
