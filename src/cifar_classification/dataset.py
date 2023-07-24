@@ -226,9 +226,8 @@ class Dataset(object):
 
         # Converts input & target batch lists into tensors.
         input_batch = tf.convert_to_tensor(input_batch, dtype=tf.float32)
-        target_batch = tf.convert_to_tensor(target_batch, dtype=tf.float32)
+        target_batch = tf.convert_to_tensor(target_batch, dtype=tf.int8)
 
         # Normalizes the input batches from [0, 255] to [0, 1] range
         input_batch = input_batch / 255.0
-        target_batch = target_batch / 255.0
         return input_batch, target_batch
