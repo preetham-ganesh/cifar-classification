@@ -218,7 +218,7 @@ class Dataset(object):
         input_batch, target_batch = list(), list()
         for index in range(self.model_configuration["batch_size"]):
             print(type(image_ids[index]), type(label_ids[index]))
-            print(str(image_ids[index], "UTF-8"))
+            print(str(image_ids[index]))
             # Loads the PNG image for the current image id as a NumPy array.
             image = self.load_image(str(image_ids[index], "UTF-8"))
             print(image.shape)
