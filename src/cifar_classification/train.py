@@ -290,7 +290,6 @@ class Train(object):
         accuracy = tf.keras.metrics.sparse_categorical_accuracy(
             target_batch, predicted_batch
         )
-        print(accuracy)
         return accuracy
 
     @tf.function
