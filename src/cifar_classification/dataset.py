@@ -220,6 +220,7 @@ class Dataset(object):
             print(type(image_ids[index]), type(label_ids[index]))
             # Loads the PNG image for the current image id as a NumPy array.
             image = self.load_image(str(image_ids[index], "UTF-8"))
+            print(image.shape)
 
             # Appends loaded image & the label id for the image to the current input & target batches.
             input_batch.append(image)
