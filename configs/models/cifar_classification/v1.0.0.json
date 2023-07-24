@@ -3,6 +3,7 @@
   "epochs": 20,
   "batch_size": 64,
   "n_classes": 100,
+  "dataset_version": "1.0.0",
   "cifar_classification": {
     "arrangement": [
       "resizing_0",
