@@ -219,12 +219,12 @@ class Dataset(object):
         for index in range(self.model_configuration["batch_size"]):
             print(str(image_ids[index]))
             # Loads the PNG image for the current image id as a NumPy array.
-            image = self.load_image(str(image_ids[index], "UTF-8"))
+            image = self.load_image(str(image_ids[index]))
             print(image.shape)
 
             # Appends loaded image & the label id for the image to the current input & target batches.
             input_batch.append(image)
-            target_batch.append(int(str(label_ids[index], "UTF-8")))
+            target_batch.append(int(label_ids[index]))
 
         # Converts input & target batch lists into tensors.
         input_batch = tf.convert_to_tensor(input_batch, dtype=tf.float32)
