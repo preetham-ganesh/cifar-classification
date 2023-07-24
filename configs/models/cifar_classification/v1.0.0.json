@@ -2,6 +2,9 @@
   "version": "1.0.0",
   "epochs": 20,
   "batch_size": 64,
+  "final_image_height": 32,
+  "final_image_width": 32,
+  "n_channels": 3,
   "n_classes": 100,
   "dataset_version": "1.0.0",
   "cifar_classification": {
