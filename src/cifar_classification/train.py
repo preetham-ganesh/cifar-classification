@@ -235,6 +235,22 @@ class Train(object):
         # Saves the model history dictionary as a JSON file.
         save_json_file(self.model_history, "history", self.reports_directory_path)
 
+    def initialize_metrics(self) -> None:
+        """Initializes loss & metric function for training the model.
+
+        Initializes loss & metric function for training the model.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+        """
+        self.loss_object = tf.keras.losses.SparseCategoricalCrossentropy(
+            from_logits=True, reduction="none"
+        )
+        self.accuracy_object = tf.keras.metrics.SparseCategoricalAccuracy()
+
     def compute_loss(
         self, target_batch: tf.Tensor, predicted_batch: tf.Tensor
     ) -> tf.Tensor:
@@ -258,9 +274,6 @@ class Train(object):
         ), "Variable predicted_batch should be of type 'tf.Tensor'."
 
         # Computes loss for the current batch using actual values and predicted values.
-        self.loss_object = tf.keras.losses.SparseCategoricalCrossentropy(
-            from_logits=True, reduction="none"
-        )
         loss = self.loss_object(target_batch, predicted_batch)
         return loss
 
@@ -286,8 +299,10 @@ class Train(object):
             predicted_batch, tf.Tensor
         ), "Variable predicted_batch should be of type 'tf.Tensor'."
 
+        # Resets accuracy object's states.
+        self.accuracy_object.reset_state()
+
         # Computes accuracy for the current batch using actual values and predicted values.
-        self.accuracy_object = tf.keras.metrics.SparseCategoricalAccuracy()
         accuracy = self.accuracy_object(target_batch, predicted_batch)
         return accuracy
 
@@ -713,8 +728,18 @@ def main():
     # Generates summary and plot for loaded model.
     trainer.generate_model_summary_and_plot(True)
 
-    #
-    trainer.train_model_per_epoch(1)
+    # Trains & validates the model using train & validation dataset.
+    trainer.fit()
+
+    # Generates model history plots for all performance metrics.
+    trainer.generate_model_history_plot("loss")
+    trainer.generate_model_history_plot("accuracy")
+
+    # Loads the model with latest checkpoint.
+    trainer.load_model("predict")
+
+    # Tests the model using the test dataset.
+    trainer.test_model()
 
 
 if __name__ == "__main__":
