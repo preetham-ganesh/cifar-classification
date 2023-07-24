@@ -8,6 +8,7 @@ import pandas as pd
 import tensorflow as tf
 import cv2
 import numpy as np
+from typing import List
 
 from src.utils import add_to_log
 
@@ -169,9 +170,9 @@ class Dataset(object):
         add_to_log("")
 
     def load_image(self, image_id: str) -> np.ndarray:
-        """# Loads the PNG image for the current image id as a NumPy array.
+        """Loads the PNG image for the current image id as a NumPy array.
 
-        # Loads the PNG image for the current image id as a NumPy array.
+        Loads the PNG image for the current image id as a NumPy array.
 
         Args:
             image_id: A string for the image id at current index.
@@ -190,3 +191,44 @@ class Dataset(object):
         )
         image = cv2.imread(file_path)
         return image
+
+    def load_input_target_batches(
+        self, image_ids: List[tf.Tensor], label_ids: List[tf.Tensor]
+    ) -> List[tf.Tensor]:
+        """Load input & target batch for image & labels ids.
+
+        Load input & target batch for image & labels ids.
+
+        Args:
+            image_ids: A list of tensors for the image ids in the current batch.
+            label_ids: A list of tensors for the label ids in the current batch.
+
+        Returns:
+            A list of tensors for the input & target batches generated from image & label ids.
+        """
+        # Asserts type & value of the arguments.
+        assert isinstance(
+            image_ids, list
+        ), "Variable image_ids should be of type 'list'."
+        assert isinstance(
+            label_ids, list
+        ), "Variable label_ids should be of type 'list'."
+
+        #
+        input_batch, target_batch = list(), list()
+        for index in range(self.model_configuration["batch_size"]):
+            # Loads the PNG image for the current image id as a NumPy array.
+            image = self.load_image(str(image_ids[index], "UTF-8"))
+
+            # Appends loaded image & the label id for the image to the current input & target batches.
+            input_batch.append(image)
+            target_batch.append(int(str(label_ids[index], "UTF-8")))
+
+        # Converts input & target batch lists into tensors.
+        input_batch = tf.convert_to_tensor(input_batch, dtype=tf.float32)
+        target_batch = tf.convert_to_tensor(target_batch, dtype=tf.float32)
+
+        # Normalizes the input batches from [0, 255] to [0, 1] range
+        input_batch = input_batch / 255.0
+        target_batch = target_batch / 255.0
+        return input_batch, target_batch
