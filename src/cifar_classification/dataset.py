@@ -193,7 +193,7 @@ class Dataset(object):
         return image
 
     def load_input_target_batches(
-        self, image_ids: List[tf.Tensor], label_ids: List[tf.Tensor]
+        self, image_ids: List[np.ndarray], label_ids: List[np.ndarray]
     ) -> List[tf.Tensor]:
         """Load input & target batch for image & labels ids.
 
@@ -218,6 +218,7 @@ class Dataset(object):
         input_batch, target_batch = list(), list()
         for index in range(self.model_configuration["batch_size"]):
             print(type(image_ids[index]), type(label_ids[index]))
+            print(str(image_ids[index], "UTF-8"))
             # Loads the PNG image for the current image id as a NumPy array.
             image = self.load_image(str(image_ids[index], "UTF-8"))
             print(image.shape)
