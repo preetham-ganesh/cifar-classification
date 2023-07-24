@@ -107,11 +107,11 @@ class Train(object):
 
         # Based on the name & configuration, optimizer is initialized.
         if (
-            self.model_configuration["cifar_classfication"]["optimizer"]["name"]
+            self.model_configuration["cifar_classification"]["optimizer"]["name"]
             == "adam"
         ):
             self.optimizer = tf.keras.optimizers.Adam(
-                learning_rate=self.model_configuration["cifar_classfication"][
+                learning_rate=self.model_configuration["cifar_classification"][
                     "optimizer"
                 ]["learning_rate"]
             )
@@ -119,7 +119,7 @@ class Train(object):
         # Creates checkpoint manager for the neural network model and loads the optimizer.
         self.home_directory_path = os.getcwd()
         self.checkpoint_directory_path = (
-            "{}/models/cifar_classfication/v{}/checkpoints".format(
+            "{}/models/cifar_classification/v{}/checkpoints".format(
                 self.home_directory_path, self.model_configuration["version"]
             )
         )
