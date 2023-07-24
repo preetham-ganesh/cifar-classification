@@ -217,10 +217,8 @@ class Dataset(object):
         # Iterates across images & labels ids in current batch.
         input_batch, target_batch = list(), list()
         for index in range(self.model_configuration["batch_size"]):
-            print(str(image_ids[index]))
             # Loads the PNG image for the current image id as a NumPy array.
             image = self.load_image(str(image_ids[index]))
-            print(image.shape)
 
             # Appends loaded image & the label id for the image to the current input & target batches.
             input_batch.append(image)
