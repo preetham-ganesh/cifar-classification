@@ -97,7 +97,7 @@ def download_extract_dataset(split: str, dataset_version: str) -> None:
     n_images_saved = len(os.listdir(extracted_images_directory_path))
 
     # Creates an empty dictionary for storing image
-    images_information = {"image_id": list(), "labels": list(), "label_id": list()}
+    images_information = {"image_id": list(), "label_name": list(), "label_id": list()}
 
     # A list for the labels in the cifar100 dataset.
     labels = [
