@@ -16,7 +16,7 @@ logging.getLogger("tensorflow").setLevel(logging.FATAL)
 
 
 import tensorflow as tf
-import pandas as pd
+import time
 
 from src.utils import load_json_file
 from src.utils import create_log
@@ -387,6 +387,46 @@ class Train(object):
         self.train_accuracy.reset_states()
         self.validation_accuracy.reset_states()
 
+    def train_model_per_epoch(self, epoch: int) -> None:
+        """Trains the model using train dataset for current epoch.
+
+        Trains the model using train dataset for current epoch.
+
+        Args:
+            epoch: An integer for the index/value of current epoch.
+
+        Returns:
+            None.
+        """
+        # Asserts type & value of the arguments.
+        assert isinstance(epoch, int), "Variable current_epoch should be of type 'int'."
+
+        # Iterates across batches in the train dataset.
+        for batch, (image_ids, label_ids) in enumerate(
+            self.dataset.train_dataset.take(self.dataset.n_train_steps_per_epoch)
+        ):
+            batch_start_time = time.time()
+
+            # Loads input & target sequences for current batch as tensors.
+            input_batch, target_batch = self.dataset.load_input_target_batches(
+                list(image_ids.numpy()), list(label_ids.numpy())
+            )
+
+            # Trains the model using the current input and target batch.
+            self.train_step(input_batch, target_batch)
+            batch_end_time = time.time()
+
+            add_to_log(
+                "Epoch={}, Batch={}, Train loss={}, Train accuracy={}, Time taken={} sec.".format(
+                    epoch + 1,
+                    batch,
+                    str(round(self.train_loss.result().numpy(), 3)),
+                    str(round(self.train_accuracy.result().numpy(), 3)),
+                    round(batch_end_time - batch_start_time, 3),
+                )
+            )
+        add_to_log("")
+
 
 def main():
     # Parses the arguments.
@@ -421,6 +461,9 @@ def main():
 
     # Generates summary and plot for loaded model.
     trainer.generate_model_summary_and_plot()
+
+    #
+    trainer.train_model_per_epoch(1)
 
 
 if __name__ == "__main__":
