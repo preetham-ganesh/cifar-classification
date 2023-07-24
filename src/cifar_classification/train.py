@@ -300,7 +300,7 @@ class Train(object):
         ), "Variable predicted_batch should be of type 'tf.Tensor'."
 
         # Resets accuracy object's states.
-        self.accuracy_object.reset_state()
+        self.accuracy_object.reset_states()
 
         # Computes accuracy for the current batch using actual values and predicted values.
         accuracy = self.accuracy_object(target_batch, predicted_batch)
