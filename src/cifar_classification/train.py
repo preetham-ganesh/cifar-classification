@@ -530,9 +530,6 @@ class Train(object):
         Returns:
             None.
         """
-        # Initializes loss & metric function for training the model.
-        self.initialize_metrics()
-
         # Initializes TensorFlow trackers which computes the mean of all metrics.
         self.initialize_metric_trackers()
 
